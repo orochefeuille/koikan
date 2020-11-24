@@ -19,16 +19,19 @@ To do this, you need to design an application that allows the user to:
     - View projects and tasks classified by deadline-Archive a project.
     - View archived projects-Use the application on sites via a tablet or a smartphone.
 
-The application is also visually enriched to provide the user with the most intuitive experience possible. 
-For example:
+The application is also visually enriched to provide the user with the most intuitive experience possible.  
+
+For example:  
+
     - On hovering over a project all other projects except this one get grey. 
     - The user can choose to temporarily hide a project or a task within a project.
 
-Some additional information: 
+Some additional information:   
+
     - A user logs in with an email and a password-A project is composed of at least a name, a description, a creation date, a deadline and a status.
     - A task is composed of at least a name, a description, a creation date, a deadline and a status.
 
-In addition to your application, your project will be found in a documentation folder : 
+#### In addition to your application, your project will be found in a documentation folder : 
     - A UseCase diagram of the application including the functionalities.
     - A database diagram listing the tables, their contents, their relationships and cardinalities.
     - A class diagram listing the entities of your application, their contents and their relationships.
