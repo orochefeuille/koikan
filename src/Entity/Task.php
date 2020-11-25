@@ -61,6 +61,7 @@ class Task
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
+        $this->createdAt = new \DateTimeImmutable('now');
         return $this->createdAt;
     }
 
