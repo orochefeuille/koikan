@@ -12,6 +12,7 @@
                     <th>Description</th>
                     <th>Deadline</th>
                     <th>CreatedAt</th>
+                    <th>Tasks</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +23,13 @@
                         <td>{{ project.description }}</td>
                         <td>{{ project.deadline|date('d-m-Y H:i:s') }}</td>
                         <td>{{ project.createdAt|date('d-m-Y H:i:s') }}</td>
+                        <td>
+                            {% for task in project.tasks %}
+                                <p class="">
+                                    {{ task.label }} {{ task.description }} {{ task.deadline|date('d-m-Y') }} {{ task.status }}
+                                </p>
+                            {% endfor %}
+                        </td>
                     </tr>
                 {% endif %}
             {% else %}
@@ -32,5 +40,4 @@
             </tbody>
         </table>
     </div>    
-    <a href="{{ path('project_index') }}">back to list</a>
 {% endblock %}
