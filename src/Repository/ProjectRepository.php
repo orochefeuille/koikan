@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,33 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
-    // /**
-    //  * @return Project[] Returns an array of Project objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getProjects(User $user)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('p.user = :user')
+            ->setParameters([
+              "user" => $user
+            ])
+            ->orderBy("p.deadline", "ASC")
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Project
+    public function getProject(int $id, User $user): ?Project
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->leftJoin("p.tasks", "t")
+            ->addSelect("t")
+            ->where('p.id = :id')
+            ->andWhere('p.user = :user')
+            ->setParameters([
+              "id" => $id,
+              "user" => $user
+            ])
+            ->orderBy("t.deadline", "ASC")
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

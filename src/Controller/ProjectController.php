@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,12 +20,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class ProjectController extends AbstractController
 {
     /**
+     * @Route("/")
      * @Route("/project", name="project_index", methods={"GET"})
      */
     public function index(ProjectRepository $projectRepository): Response
     {
         return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findAll(),
+            'projects' => $projectRepository->getProjects($this->getUser()),
         ]);
     }
 
@@ -40,8 +42,8 @@ class ProjectController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $project->setUser($user);
-            $project->setStatus($project->getStatus());
-            $project->setCreatedAt($project->getCreatedAt());
+            $project->setStatus('todo');
+            $project->setCreatedAt(new DateTimeImmutable('now'));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($project);
@@ -59,10 +61,10 @@ class ProjectController extends AbstractController
     /**
      * @Route("/{id}/show", name="project_show", methods={"GET"})
      */
-    public function show(Project $project): Response
+    public function show(int $id, ProjectRepository $projectRepository): Response
     {
         return $this->render('project/show.html.twig', [
-            'project' => $project,
+            'project' => $projectRepository->getProject($id, $this->getUser()),
         ]);
     }
 

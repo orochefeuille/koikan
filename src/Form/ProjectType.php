@@ -6,6 +6,7 @@ use App\Entity\Project;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ProjectType extends AbstractType
 {
@@ -15,6 +16,13 @@ class ProjectType extends AbstractType
             ->add('label')
             ->add('description')
             ->add('deadline')
+            ->add('status', ChoiceType::class, [
+                'choices'  => [
+                    'à démarrer' => 'todo',
+                    'en cours' => 'in progress',
+                    'terminé' => 'done',
+                ],
+            ])
         ;
     }
 

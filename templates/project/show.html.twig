@@ -33,10 +33,23 @@
             </tr>
         </tbody>
     </table>
-
+    {% for task in project.tasks %}
+        <div class="row">
+            <div class="col-6">
+                {{ task.label }} {{ task.deadline|date('d-m-Y') }} {{ task.status }}
+                <a href="{{ path('task_edit', {'id': task.id}) }}">edit task</a>
+            </div>
+            <div class="col-6">
+                {{ include('task/_delete_form.html.twig') }}
+            </div>
+        </div>
+    {% endfor %}
     <a href="{{ path('project_index') }}">back to list</a>
 
     <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+
+    <a href="{{ path('task_new', {'id': project.id}) }}">new task</a>
+
 
     {{ include('project/_delete_form.html.twig') }}
 {% endblock %}
