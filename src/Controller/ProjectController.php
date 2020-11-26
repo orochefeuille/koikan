@@ -9,14 +9,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 /**
- * @Route("/project")
+ * @IsGranted("ROLE_USER")
+ * @Route("/")
  */
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("/", name="project_index", methods={"GET"})
+     * @Route("/project", name="project_index", methods={"GET"})
      */
     public function index(ProjectRepository $projectRepository): Response
     {
@@ -33,8 +36,13 @@ class ProjectController extends AbstractController
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $project->setUser($user);
+            $project->setStatus($project->getStatus());
+            $project->setCreatedAt($project->getCreatedAt());
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($project);
             $entityManager->flush();
@@ -49,7 +57,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="project_show", methods={"GET"})
+     * @Route("/{id}/show", name="project_show", methods={"GET"})
      */
     public function show(Project $project): Response
     {

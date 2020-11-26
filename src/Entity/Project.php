@@ -92,6 +92,7 @@ class Project
 
     public function getStatus(): ?string
     {
+        $this->status = 'todo';
         return $this->status;
     }
 
@@ -127,7 +128,7 @@ class Project
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?user
     {
         return $this->user;
     }
