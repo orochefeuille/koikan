@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,20 +23,24 @@ class TaskController extends AbstractController
     public function index(TaskRepository $taskRepository): Response
     {
         return $this->render('task/index.html.twig', [
-            'tasks' => $taskRepository->findAll(),
+            'tasks' => $taskRepository->getTasks($this->getUser()),
         ]);
     }
 
     /**
-     * @Route("/new", name="task_new", methods={"GET","POST"})
+     * @Route("/{id}/new", name="task_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Project $project): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $task->setUser($this->getUser());
+            $task->setProject($project);
+            $task->setStatus('todo');
+            $task->setCreatedAt(new DateTimeImmutable('now'));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($task);
             $entityManager->flush();

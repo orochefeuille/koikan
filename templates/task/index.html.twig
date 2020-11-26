@@ -4,10 +4,11 @@
 
 {% block main %}
     <h1>Task index</h1>
-
+    
     <table class="table">
         <thead>
             <tr>
+                <th>project</th>
                 <th>Id</th>
                 <th>CreatedAt</th>
                 <th>Deadline</th>
@@ -20,6 +21,7 @@
         <tbody>
         {% for task in tasks %}
             <tr>
+                <td>{{ task.project.label }}</td>
                 <td>{{ task.id }}</td>
                 <td>{{ task.createdAt ? task.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
@@ -39,5 +41,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('task_new') }}">Create new</a>
 {% endblock %}

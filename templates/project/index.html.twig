@@ -18,17 +18,18 @@
             </tr>
         </thead>
         <tbody>
-        {% for project in app.user.projects %}
+        {% for project in projects %}
             <tr>
                 <td>{{ project.id }}</td>
                 <td>{{ project.label }}</td>
                 <td>{{ project.description }}</td>
                 <td>{{ project.status }}</td>
-                <td>{{ project.deadline ? project.deadline|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ project.deadline|date('Y-m-d H:i:s') }}</td>
+                <td>{{ project.createdAt|date('Y-m-d H:i:s') }}</td>
                 <td>
                     <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
                     <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                    {{ include('project/_delete_form.html.twig') }}
                 </td>
             </tr>
         {% else %}
