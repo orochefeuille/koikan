@@ -1,0 +1,43 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Archive index{% endblock %}
+
+{% block main %}
+    <h1>Archived projects</h1>
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>Description</th>
+                    <th>Deadline</th>
+                    <th>CreatedAt</th>
+                    <th>Tasks</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                {% if project.status == 'stored' %}
+                    <tr>
+                        <td>{{ project.label }}</td>
+                        <td>{{ project.description }}</td>
+                        <td>{{ project.deadline|date('d-m-Y H:i:s') }}</td>
+                        <td>{{ project.createdAt|date('d-m-Y H:i:s') }}</td>
+                        <td>
+                            {% for task in project.tasks %}
+                                <p class="">
+                                    {{ task.label }} {{ task.description }} {{ task.deadline|date('d-m-Y') }} {{ task.status }}
+                                </p>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>    
+{% endblock %}
