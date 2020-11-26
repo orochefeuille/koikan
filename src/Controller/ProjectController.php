@@ -116,4 +116,14 @@ class ProjectController extends AbstractController
 
         return $this->redirectToRoute('project_index');
     }
+
+    /**
+     * @Route("/archive", name="project_archived", methods={"GET"})
+     */
+    public function indexArchive(ProjectRepository $projectRepository): Response
+    {
+        return $this->render('project/showArchive.html.twig', [
+            'projects' => $projectRepository->getProjects($this->getUser()),
+        ]);
+    }
 }
