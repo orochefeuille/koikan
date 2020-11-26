@@ -101,4 +101,19 @@ class ProjectController extends AbstractController
 
         return $this->redirectToRoute('project_index');
     }
+
+    /**
+     * @Route("/{id}", name="project_archive", methods={"UPDATE"})
+     */
+    public function archive(Request $request, Project $project): Response
+    {
+        if ($this->isCsrfTokenValid('stored'.$project->getId(), $request->request->get('_token'))) {
+            $project->setStatus('stored');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($project);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('project_index');
+    }
 }

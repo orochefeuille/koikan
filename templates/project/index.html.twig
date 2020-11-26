@@ -30,6 +30,7 @@
                     <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
                     <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
                     {{ include('project/_delete_form.html.twig') }}
+                    {{ include('project/_archive_form.html.twig') }}
                 </td>
             </tr>
         {% else %}

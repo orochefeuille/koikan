@@ -21,7 +21,7 @@
         <tbody>
         {% for task in tasks %}
             <tr>
-                <td>{{ task.project.label }}</td>
+                <td>{{ task.project.label }}  <a href="{{ path('project_show', {'id': task.project.id}) }}">show this project</a></td>
                 <td>{{ task.id }}</td>
                 <td>{{ task.createdAt ? task.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
