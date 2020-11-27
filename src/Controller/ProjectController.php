@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @IsGranted("ROLE_USER")
@@ -33,23 +33,36 @@ class ProjectController extends AbstractController
     /**
      * @Route("/new", name="project_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, ValidatorInterface $validator): Response
     {
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
         $user = $this->getUser();
+        $errors = $validator->validate($project);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $project->setUser($user);
             $project->setStatus('todo');
             $project->setCreatedAt(new DateTimeImmutable('now'));
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($project);
-            $entityManager->flush();
+            if(count($errors) === 0) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($project);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('project_index');
+                $this->addFlash(
+                    'success',
+                    'Projet créé !'
+                );
+                return $this->redirectToRoute('project_index');
+            }
+            else {
+                $this->addFlash(
+                'danger',
+                'Ce projet n\'a pu être créé !'
+                );
+            }
         }
 
         return $this->render('project/new.html.twig', [
@@ -71,17 +84,28 @@ class ProjectController extends AbstractController
     /**
      * @Route("/{id}/edit", name="project_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Project $project): Response
+    public function edit(Request $request, Project $project, ValidatorInterface $validator): Response
     {
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
+        $errors = $validator->validate($project);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('project_index');
+            if(count($errors) === 0) {
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash(
+                    'success',
+                    'Projet mis à jour !'
+                );
+                return $this->redirectToRoute('project_index');
+            }
+            else{
+                $this->addFlash(
+                    'danger',
+                    'Ce projet n\'a pu être mis à jour !'
+                );
+            }
         }
-
         return $this->render('project/edit.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
@@ -91,27 +115,54 @@ class ProjectController extends AbstractController
     /**
      * @Route("/{id}", name="project_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Project $project): Response
+    public function delete(Request $request, Project $project, ValidatorInterface $validator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($project);
-            $entityManager->flush();
-        }
+            $errors = $validator->validate($project);
+            if(count($errors) === 0) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($project);
+                $entityManager->flush();
 
+                $this->addFlash(
+                    'success',
+                    'Le projet a été supprimé !'
+                );
+            }
+            else{
+                $this->addFlash(
+                    'danger',
+                    'Ce projet n\'a pu être supprimé !'
+                );
+            }
+        }
         return $this->redirectToRoute('project_index');
     }
 
     /**
      * @Route("/{id}", name="project_archive", methods={"UPDATE"})
      */
-    public function archive(Request $request, Project $project): Response
+    public function archive(Request $request, Project $project, ValidatorInterface $validator): Response
     {
         if ($this->isCsrfTokenValid('stored'.$project->getId(), $request->request->get('_token'))) {
             $project->setStatus('stored');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($project);
-            $entityManager->flush();
+            $errors = $validator->validate($project);
+            if(count($errors) === 0) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($project);
+                $entityManager->flush();
+                
+                $this->addFlash(
+                    'success',
+                    'Le projet a été archivé !'
+                );
+            }
+            else{
+                $this->addFlash(
+                    'danger',
+                    'Ce projet n\'a pu être archivé !'
+                );
+            }
         }
 
         return $this->redirectToRoute('project_index');

@@ -6,6 +6,13 @@
     {% include 'inc/navbar.html.twig' %}
     {% include "inc/header.html.twig" %}
     <main class="container">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert-{{ label }} p-2">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% block main %}{% endblock %}
     </main>
     {% include "inc/footer.html.twig" %}
