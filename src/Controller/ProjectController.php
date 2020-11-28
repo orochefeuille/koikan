@@ -36,6 +36,7 @@ class ProjectController extends AbstractController
     public function new(Request $request, ValidatorInterface $validator): Response
     {
         $project = new Project();
+        setlocale(LC_TIME, "fr_FR");
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
         $user = $this->getUser();
