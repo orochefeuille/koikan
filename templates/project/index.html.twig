@@ -3,22 +3,34 @@
 {% block title %}Vos projets{% endblock %}
 
 {% block main %}
+    {% set activeProjects = [] %}
+    {% for project in projects %}
+        {% if project.status != 'stored' %}
+            {% set activeProjects = activeProjects|merge([1]) %}
+        {% endif %}
+    {% endfor %}
     <div class="page-info mb-4  text-center">
         <div class="mb-3">
             <a class="btn bg-orange-dark text-white" href="{{ path('project_new') }}">Créer un nouveau project</a>
         </div>
-        <h2><span class="badge bg-green text-white">{{ projects|length }}</span> projets en cours</h2>
+        <h2><span class="badge bg-green text-white">{{ activeProjects|length }}</span> projets en cours</h2>
     </div>
+
     {% for project in projects %}
         {% if project.status != 'stored' %}
-            <div class="list-group" id="list-tab">
-                <div class="list-group-item">
+            <div class="list-group">
+                <div class="list-group-item" id="list-tab">
                     <div class="row">
                         <div class="plus-minus"><i class="fas fa-plus-square"></i></div>
                         <div class="row col-md-6">
                             <div class="col-12 d-flex justify-content-between">
                                 <div class="font-weight-bolder">{{ project.label }}</div>
-                                <div class="project-status"> <small>{{ project.status }}</small> <i class="fas fa-bookmark"></i></div>
+                                <a 
+                                    href="{{ path('project_change_status', {'id': project.id}) }}" 
+                                    class="js-project-status"> 
+                                    <small id="js-status-text" class="">{{ project.status }}</small> 
+                                     <i id="js-status-icon" class="fas fa-bookmark"></i>
+                                </a>
                             </div>
                             <div class="col-12 m-0">
                                 <span class=""> {{ project.deadline|date('d-m-Y H:i') }}</span>

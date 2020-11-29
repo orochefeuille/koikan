@@ -39,6 +39,10 @@
     color:#ffffff;
 }
 
+a {
+    text-decoration: none !important;
+}
+
 .active {
     padding: 0 5px;
     border-left: dashed 1px white;
@@ -68,10 +72,14 @@ main {
     color:#d35d6e;
 }
 
+.isDone {
+    opacity: 0.4;
+}
+
 
 @media(min-width:992px) {
     .active {
         border-left: none;
-        border-top: dashed 1px white;
+        border-top: ridge 1px white;
     }
 }

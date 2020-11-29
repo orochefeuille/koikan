@@ -25,7 +25,7 @@ class ProjectController extends AbstractController
      */
     public function index(ProjectRepository $projectRepository): Response
     {
-        return $this->render('project/index.html.twig', [
+         return $this->render('project/index.html.twig', [
             'projects' => $projectRepository->getProjects($this->getUser()),
         ]);
     }
@@ -114,7 +114,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="project_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="project_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Project $project, ValidatorInterface $validator): Response
     {
@@ -141,7 +141,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="project_archive", methods={"UPDATE"})
+     * @Route("/{id}/archive", name="project_archive", methods={"UPDATE"})
      */
     public function archive(Request $request, Project $project, ValidatorInterface $validator): Response
     {
@@ -177,5 +177,26 @@ class ProjectController extends AbstractController
         return $this->render('project/showArchive.html.twig', [
             'projects' => $projectRepository->getProjects($this->getUser()),
         ]);
+    }
+
+    /**
+     * @Route("/{id}/change_status", name="project_change_status")
+     */
+    public function changeStatus(Project $project, ProjectRepository $projectRepository): Response
+    {
+        $status = $projectRepository->getProject($project->getId(), $this->getUser())->getStatus();
+        if($status == "todo") {
+            $status = "in progress";
+        }
+        elseif($status == "in progress"){
+            $status = "done";
+        }
+        else {
+            $status = "todo";
+        }
+
+        $project->setStatus($status);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->json(['code' => 200, 'message' => 'Statut changé', 'statusText' => $status], 200);
     }
 }
