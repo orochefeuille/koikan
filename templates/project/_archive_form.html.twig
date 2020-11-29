@@ -1,5 +1,9 @@
 <form method="post" action="{{ path('project_archive', {'id': project.id}) }}" onsubmit="return confirm('Are you sure you want to archive this item ?');">
     <input type="hidden" name="_method" value="UPDATE">
     <input type="hidden" name="_token" value="{{ csrf_token('stored' ~ project.id) }}">
-    <button class="btn">Archive</button>
+    <a 
+        class="btn btn-warning bg-orange-medium text-white rounded ml-1"
+        data-toggle="tooltip" data-placement="top" title="Archiver le projet">
+        <i class="fas fa-file-archive fa-2x"></i>
+    </a>
 </form>

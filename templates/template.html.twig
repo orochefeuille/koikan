@@ -5,7 +5,7 @@
 {% block body %}
     {% include 'inc/navbar.html.twig' %}
     {% include "inc/header.html.twig" %}
-    <main class="container">
+    <main class="container container-fluid">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="alert-{{ label }} p-2">

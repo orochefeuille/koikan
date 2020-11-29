@@ -3,45 +3,56 @@
 {% block title %}Vos projets{% endblock %}
 
 {% block main %}
-    <h2>Project index</h1>
-<div class="table-responsive">
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Label</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Deadline</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for project in projects %}
-            {% if project.status != 'stored' %}
-                <tr>
-                    <td>{{ project.id }}</td>
-                    <td>{{ project.label }}</td>
-                    <td>{{ project.description }}</td>
-                    <td>{{ project.status }}</td>
-                    <td>{{ project.deadline|date('Y-m-d H:i:s') }}</td>
-                    <td>{{ project.createdAt|date('Y-m-d H:i:s') }}</td>
-                    <td>
-                        <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
-                        <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
-                        {{ include('project/_delete_form.html.twig') }}
-                        {{ include('project/_archive_form.html.twig') }}
-                    </td>
-                </tr>
-            {% endif %}
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>    
-    <a href="{{ path('project_new') }}">Create new</a>
+    <div class="page-info mb-4  text-center">
+        <div class="mb-3">
+            <a class="btn bg-orange-dark text-white" href="{{ path('project_new') }}">Créer un nouveau project</a>
+        </div>
+        <h2><span class="badge bg-green text-white">{{ projects|length }}</span> projets en cours</h2>
+    </div>
+    {% for project in projects %}
+        {% if project.status != 'stored' %}
+            <div class="list-group" id="list-tab">
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="plus-minus"><i class="fas fa-plus-square"></i></div>
+                        <div class="row col-md-6">
+                            <div class="col-12 d-flex justify-content-between">
+                                <div class="font-weight-bolder">{{ project.label }}</div>
+                                <div class="project-status"> <small>{{ project.status }}</small> <i class="fas fa-bookmark"></i></div>
+                            </div>
+                            <div class="col-12 m-0">
+                                <span class=""> {{ project.deadline|date('d-m-Y H:i') }}</span>
+                            </div>
+                        </div>
+                        <div class="row mt-2 col-md-6 text-right">
+                            <div class="col-12 p-0">
+                                <div class="btn-group mx-0" role="group" aria-label="actions">
+                                    <a 
+                                        class="btn btn-success bg-green text-white border-0 rounded" 
+                                        href="{{ path('project_show', {'id': project.id}) }}"
+                                        data-toggle="tooltip" data-placement="top" title="Voir le projet">
+                                        <i class="far fa-eye fa-2x"></i>
+                                    </a>
+                                    <a 
+                                        class="btn btn-warning bg-orange-light text-white border-0 rounded ml-1" 
+                                        href="{{ path('project_edit', {'id': project.id}) }}"
+                                        data-toggle="tooltip" data-placement="top" title="Modifier le projet">
+                                        <i class="fas fa-edit fa-2x"></i>
+                                    </a>
+                                    {{ include('project/_archive_form.html.twig') }}
+                                    {{ include('project/_delete_form.html.twig') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane ml-2" style="height: 0px; overflow: hidden; transition: height 0.5s ease-out">{{ project.description }}</div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-primary" role="alert">
+            no records found
+        </div>
+    {% endfor %}
 {% endblock %}
+{% block javascripts %}<script src="{{ asset('assets/js/index.js') }}"></script>{% endblock %}
