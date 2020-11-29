@@ -4,6 +4,10 @@
     <button 
         class="btn btn-danger bg-orange-dark text-white rounded mx-1"
         data-toggle="tooltip" data-placement="top" title="Supprimer le projet">
-        <i class="far fa-times-circle fa-2x"></i>
+        {% if app.request.get('_route') == 'project_edit' %}
+            <span class="font-weight-bolder p-1">delete</span>
+        {% else %}
+            <i class="far fa-times-circle fa-2x"></i>
+        {% endif %}
     </button>
 </form>
