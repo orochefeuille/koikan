@@ -1,16 +1,30 @@
 {% if app.user %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    {# <a class="navbar-brand" href="#">EasyBlog</a> #}
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" href="{{ path('project_index') }}">Projets en cours <span class="sr-only">(current)</span></a>
-        <a class="nav-link" href="{{ path('project_archived') }}">Projets archivés</a>
-        <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
-
+  {% set route_name = app.request.attributes.get('_route') %}
+  <nav class="navbar navbar-dark navbar-expand-lg bg-orange-dark font-weight-bolder">
+      {# <a class="navbar-brand" href="#">EasyBlog</a> #}
+      <button class="custom-toggler navbar-toggler m-2" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="custom-toggler navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav w-100 d-flex">
+          <li
+            {% if route_name == "project_index" %} 
+              class="nav-item active" 
+            {% else %} 
+              class="nav-item" 
+            {% endif %} >
+            <a class="nav-link text-white" href="{{ path('project_index') }}">Projets en cours <span class="sr-only">(current)</span></a>
+          </li>
+          <li
+            {% if route_name == "project_archived" %} 
+              class="nav-item active" 
+            {% else %} 
+              class="nav-item" 
+            {% endif %} >
+            <a class="nav-link text-white" href="{{ path('project_archived') }}">Projets archivés</a>
+          </li> 
+            <a class="nav-link ml-lg-auto text-white" href="{{ path('app_logout') }}">Déconnexion</a>
+        </div>
       </div>
-    </div>
-</nav>
+  </nav>
 {% endif %}
