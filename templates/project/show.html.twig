@@ -3,17 +3,29 @@
 {% block title %}Project{% endblock %}
 
 {% block main %}
-    <h1>Project</h1>
-
+    <div class="row mb-3">
+        <div class="text-center text-lg-right mb-3 w-100">
+            <a class="btn btn-info" href="{{ path('project_index') }}">back to list</a>
+        </div>
+        <div class="col-auto">
+            <h2>{{ project.label }}</h2>        
+        </div>
+        <div class="col-4 d-flex justify-content-betwwen">
+            <a 
+                class="btn btn-warning bg-orange-light text-white border-0 rounded ml-1" 
+                href="{{ path('project_edit', {'id': project.id}) }}"
+                data-toggle="tooltip" data-placement="top" title="Modifier le projet">
+                <i class="fas fa-edit fa-2x"></i>
+            </a>
+            <span>{{ include('project/_archive_form.html.twig') }}</span> 
+            <span>{{ include('project/_delete_form.html.twig') }}</span>  
+        </div>
+    </div>
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ project.id }}</td>
-            </tr>
-            <tr>
-                <th>Label</th>
-                <td>{{ project.label }}</td>
+                <th>Deadline</th>
+                <td>{{ project.deadline ? project.deadline|date('d-m-Y H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>Description</th>
@@ -24,32 +36,29 @@
                 <td>{{ project.status }}</td>
             </tr>
             <tr>
-                <th>Deadline</th>
-                <td>{{ project.deadline ? project.deadline|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
                 <th>CreatedAt</th>
-                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ project.createdAt ? project.createdAt|date('d-m-Y H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
+    <h3> Project's tasks</h3>
+    <div class="">
+        <a class="btn btn-small bg-green text-white" href="{{ path('task_new', {'id': project.id}) }}">new task</a>
+    </div> 
     {% for task in project.tasks %}
-        <div class="row">
-            <div class="col-6">
+        <div class="row my-3">
+            <div class="col-auto">
                 {{ task.label }} {{ task.deadline|date('d-m-Y') }} {{ task.status }}
-                <a href="{{ path('task_edit', {'id': task.id}) }}">edit task</a>
             </div>
-            <div class="col-6">
+            <div class="col-4 d-flex">
+                <a 
+                    class="btn btn-warning bg-orange-light text-white border-0 rounded ml-1"
+                    href="{{ path('task_edit', {'id': task.id}) }}"
+                    data-toggle="tooltip" data-placement="top" title="Modifier la tâche">
+                    <i class="fas fa-edit fa-1x"></i>
+                </a>
                 {{ include('task/_delete_form.html.twig') }}
             </div>
         </div>
     {% endfor %}
-    <a href="{{ path('project_index') }}">back to list</a>
-
-    <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
-
-    <a href="{{ path('task_new', {'id': project.id}) }}">new task</a>
-
-
-    {{ include('project/_delete_form.html.twig') }}
 {% endblock %}

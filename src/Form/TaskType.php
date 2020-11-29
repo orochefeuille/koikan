@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class TaskType extends AbstractType
 {
@@ -15,7 +16,11 @@ class TaskType extends AbstractType
         $builder
             ->add('label')
             ->add('description')
-            ->add('deadline')
+            ->add('deadline', DateTimeType::Class, array(
+                'widget' => 'choice', 
+                'date_format' => 'dd-MMMM-yyyy',
+                'years' => range(date('Y'), date('Y')+100),
+            ))
             ->add('status', ChoiceType::class, [
                 'choices'  => [
                     'à démarrer' => 'todo',

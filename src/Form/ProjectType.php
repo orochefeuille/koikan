@@ -19,8 +19,7 @@ class ProjectType extends AbstractType
             ->add('description')
             ->add('deadline', DateTimeType::Class, array(
                 'widget' => 'choice', 
-                // 'format' => 'dd-MMMM-yyyy',
-                // 'html5' => false,
+                'date_format' => 'dd-MMMM-yyyy',
                 'years' => range(date('Y'), date('Y')+100),
             ))
             ->add('status', ChoiceType::class, [
